@@ -1,0 +1,465 @@
+// ===========================================================
+// FELIZ ANIVERSÁRIO — fogos, confetes, balões, música e interações
+// ===========================================================
+
+const state = {
+  userName: 'Aniversariante',
+  musicPlaying: false,
+  wishes: []
+};
+
+/* ---------------------------------------------------------
+   CANVAS (fogos + confetes) com loop de animação
+--------------------------------------------------------- */
+const fireworksCanvas = document.getElementById('fireworks-canvas');
+const confettiCanvas = document.getElementById('confetti-canvas');
+const fireworksCtx = fireworksCanvas.getContext('2d');
+const confettiCtx = confettiCanvas.getContext('2d');
+
+function resizeCanvases() {
+  fireworksCanvas.width = confettiCanvas.width = window.innerWidth;
+  fireworksCanvas.height = confettiCanvas.height = window.innerHeight;
+}
+resizeCanvases();
+window.addEventListener('resize', resizeCanvases);
+
+const FIREWORK_COLORS = ['#ff6b6b', '#ffd93d', '#4ecdc4', '#ffe66d', '#1dd1a1', '#ff9ff3', '#74b9ff'];
+const CONFETTI_COLORS = ['#ff6b6b', '#ffd93d', '#4ecdc4', '#ffe66d', '#1dd1a1', '#ff8c42', '#ff9ff3'];
+
+/* ---- Fogos de artifício ---- */
+class Firework {
+  constructor(x, y) {
+    const baseColor = FIREWORK_COLORS[Math.floor(Math.random() * FIREWORK_COLORS.length)];
+    const count = 60 + Math.floor(Math.random() * 40);
+    this.particles = [];
+    for (let i = 0; i < count; i++) {
+      const angle = (Math.PI * 2 * i) / count;
+      const speed = 2 + Math.random() * 5;
+      this.particles.push({
+        x, y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        color: Math.random() > 0.3 ? baseColor : FIREWORK_COLORS[Math.floor(Math.random() * FIREWORK_COLORS.length)],
+        size: 1.5 + Math.random() * 2.5,
+        alpha: 1,
+        decay: 0.012 + Math.random() * 0.012
+      });
+    }
+  }
+  update() {
+    this.particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.05;
+      p.vx *= 0.98;
+      p.vy *= 0.98;
+      p.alpha -= p.decay;
+    });
+    this.particles = this.particles.filter(p => p.alpha > 0);
+  }
+  draw(ctx) {
+    this.particles.forEach(p => {
+      ctx.globalAlpha = Math.max(0, p.alpha);
+      ctx.fillStyle = p.color;
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+  }
+  get done() { return this.particles.length === 0; }
+}
+
+let fireworks = [];
+
+function launchFireworks(x, y) {
+  fireworks.push(new Firework(x, y));
+}
+
+function randomFireworks(n = 3) {
+  for (let i = 0; i < n; i++) {
+    setTimeout(() => {
+      launchFireworks(
+        window.innerWidth * (0.15 + Math.random() * 0.7),
+        window.innerHeight * (0.1 + Math.random() * 0.4)
+      );
+    }, i * 350);
+  }
+}
+
+/* ---- Confetes ---- */
+class ConfettiPiece {
+  constructor(x, y, burst = true) {
+    this.x = x;
+    this.y = y;
+    this.w = 6 + Math.random() * 8;
+    this.h = 4 + Math.random() * 6;
+    this.color = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+    this.rotation = Math.random() * Math.PI * 2;
+    this.rotationSpeed = (Math.random() - 0.5) * 0.3;
+    this.vx = burst ? (Math.random() - 0.5) * 12 : (Math.random() - 0.5) * 2;
+    this.vy = burst ? -4 - Math.random() * 9 : 1 + Math.random() * 2;
+    this.gravity = 0.18;
+    this.drag = 0.99;
+    this.alpha = 1;
+    this.round = Math.random() > 0.6;
+  }
+  update() {
+    this.vy += this.gravity;
+    this.vx *= this.drag;
+    this.vy *= this.drag;
+    this.x += this.vx + Math.sin(this.y / 30) * 0.6; // balanço
+    this.y += this.vy;
+    this.rotation += this.rotationSpeed;
+    if (this.y > window.innerHeight * 0.75) this.alpha -= 0.02;
+  }
+  draw(ctx) {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotation);
+    ctx.globalAlpha = Math.max(0, this.alpha);
+    ctx.fillStyle = this.color;
+    if (this.round) {
+      ctx.beginPath();
+      ctx.arc(0, 0, this.w / 2.5, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      ctx.fillRect(-this.w / 2, -this.h / 2, this.w, this.h);
+    }
+    ctx.restore();
+  }
+  get done() { return this.alpha <= 0 || this.y > window.innerHeight + 40; }
+}
+
+let confettiPieces = [];
+
+function launchConfetti(x, y, count = 60) {
+  for (let i = 0; i < count; i++) confettiPieces.push(new ConfettiPiece(x, y, true));
+}
+
+function confettiRain(count = 120) {
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => {
+      confettiPieces.push(new ConfettiPiece(Math.random() * window.innerWidth, -10, false));
+    }, Math.random() * 1500);
+  }
+}
+
+/* ---- Loop principal ---- */
+function animate() {
+  fireworksCtx.clearRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
+  fireworks.forEach(fw => { fw.update(); fw.draw(fireworksCtx); });
+  fireworks = fireworks.filter(fw => !fw.done);
+
+  confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+  confettiPieces.forEach(c => { c.update(); c.draw(confettiCtx); });
+  confettiPieces = confettiPieces.filter(c => !c.done);
+
+  requestAnimationFrame(animate);
+}
+requestAnimationFrame(animate);
+
+/* ---------------------------------------------------------
+   BALÕES
+--------------------------------------------------------- */
+const balloonsContainer = document.getElementById('balloons-container');
+
+function createBalloons(count = 15) {
+  const colors = ['#ff6b6b', '#ffd93d', '#4ecdc4', '#1dd1a1', '#ff9ff3', '#74b9ff'];
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => {
+      const balloon = document.createElement('div');
+      balloon.className = 'balloon';
+      balloon.style.left = `${Math.random() * 90}%`;
+      balloon.style.setProperty('--c', colors[Math.floor(Math.random() * colors.length)]);
+      balloon.style.animationDuration = `${10 + Math.random() * 8}s`;
+
+      balloon.addEventListener('click', () => {
+        const r = balloon.getBoundingClientRect();
+        launchConfetti(r.left + r.width / 2, r.top + r.height / 2, 40);
+        balloon.remove();
+      });
+      balloon.addEventListener('animationend', () => balloon.remove());
+
+      balloonsContainer.appendChild(balloon);
+    }, i * 250);
+  }
+}
+
+/* ---------------------------------------------------------
+   MÚSICA — "Parabéns pra Você" (melodia correta, em loop)
+--------------------------------------------------------- */
+const btnMusic = document.getElementById('btn-music');
+let audioContext = null;
+let masterGain = null;
+let musicTimer = null;
+let activeOscillators = [];
+
+// [frequência Hz, duração em batidas]
+const N = { C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.0, A4: 440.0, Bb4: 466.16, C5: 523.25 };
+const MELODY = [
+  [N.C4, .75], [N.C4, .25], [N.D4, 1], [N.C4, 1], [N.F4, 1], [N.E4, 2],
+  [N.C4, .75], [N.C4, .25], [N.D4, 1], [N.C4, 1], [N.G4, 1], [N.F4, 2],
+  [N.C4, .75], [N.C4, .25], [N.C5, 1], [N.A4, 1], [N.F4, 1], [N.E4, 1], [N.D4, 2],
+  [N.Bb4, .75], [N.Bb4, .25], [N.A4, 1], [N.F4, 1], [N.G4, 1], [N.F4, 2]
+];
+const BEAT = 0.5; // segundos por batida
+
+function scheduleMelody() {
+  let t = audioContext.currentTime + 0.1;
+  MELODY.forEach(([freq, beats]) => {
+    const dur = beats * BEAT;
+    const osc = audioContext.createOscillator();
+    const env = audioContext.createGain();
+    osc.type = 'triangle';
+    osc.frequency.value = freq;
+    env.gain.setValueAtTime(0, t);
+    env.gain.linearRampToValueAtTime(0.35, t + 0.03);
+    env.gain.exponentialRampToValueAtTime(0.001, t + dur * 0.95);
+    osc.connect(env);
+    env.connect(masterGain);
+    osc.start(t);
+    osc.stop(t + dur);
+    osc.onended = () => { activeOscillators = activeOscillators.filter(o => o !== osc); };
+    activeOscillators.push(osc);
+    t += dur;
+  });
+  return t - audioContext.currentTime;
+}
+
+function playLoop() {
+  if (!state.musicPlaying) return;
+  const total = scheduleMelody();
+  musicTimer = setTimeout(playLoop, (total + 1.5) * 1000);
+}
+
+function setMusicLabel() {
+  btnMusic.innerHTML = `🎵 <span class="btn-text">Música: ${state.musicPlaying ? 'Ligada' : 'Desligada'}</span>`;
+}
+
+function toggleMusic() {
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = audioContext.createGain();
+    masterGain.gain.value = 0.5;
+    masterGain.connect(audioContext.destination);
+  }
+
+  if (state.musicPlaying) {
+    state.musicPlaying = false;
+    clearTimeout(musicTimer);
+    activeOscillators.forEach(o => { try { o.stop(); } catch (e) {} });
+    activeOscillators = [];
+  } else {
+    state.musicPlaying = true;
+    audioContext.resume();
+    playLoop();
+  }
+  setMusicLabel();
+}
+
+btnMusic.addEventListener('click', toggleMusic);
+
+/* ---------------------------------------------------------
+   ESTRELAS DECORATIVAS DE FUNDO
+--------------------------------------------------------- */
+function createStars() {
+  const symbols = ['★', '☆', '✧', '✦'];
+  for (let i = 0; i < 25; i++) {
+    const star = document.createElement('div');
+    star.className = 'decorative-star';
+    star.style.left = `${Math.random() * 100}%`;
+    star.style.top = `${Math.random() * 100}%`;
+    star.style.animationDelay = `${Math.random() * 6}s`;
+    star.style.fontSize = `${0.7 + Math.random() * 1.1}rem`;
+    star.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    document.body.appendChild(star);
+  }
+}
+createStars();
+
+/* ---------------------------------------------------------
+   LANÇADOR DE DESEJOS
+--------------------------------------------------------- */
+const wishInput = document.getElementById('user-wish-input');
+const btnSendWish = document.getElementById('btn-send-wish');
+const wishFeedback = document.getElementById('wish-feedback');
+let wishFeedbackTimer = null;
+
+function sendWish() {
+  const text = wishInput.value.trim();
+  if (!text) {
+    wishInput.focus();
+    return;
+  }
+  state.wishes.push(text);
+
+  const rect = btnSendWish.getBoundingClientRect();
+  const star = document.createElement('div');
+  star.className = 'wish-star';
+  star.textContent = '✦';
+  star.style.left = `${rect.left + rect.width / 2}px`;
+  star.style.top = `${rect.top}px`;
+  document.body.appendChild(star);
+  star.addEventListener('animationend', () => star.remove());
+
+  launchConfetti(rect.left + rect.width / 2, rect.top, 25);
+
+  wishFeedback.textContent = `✨ Seu desejo "${text}" foi enviado ao Universo!`;
+  wishFeedback.classList.add('show');
+  wishInput.value = '';
+
+  clearTimeout(wishFeedbackTimer);
+  wishFeedbackTimer = setTimeout(() => wishFeedback.classList.remove('show'), 4000);
+}
+
+btnSendWish.addEventListener('click', sendWish);
+wishInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendWish(); });
+
+/* ---------------------------------------------------------
+   ELOGIOS ALEATÓRIOS
+--------------------------------------------------------- */
+const compliments = [
+  "Você tem uma energia contagiante que alegra qualquer ambiente em que entra!",
+  "Sua criatividade não tem limites - continue incrível!",
+  "Você inspira pessoas ao seu redor a serem melhores todo dia!",
+  "Seu sorriso é capaz de iluminar até o dia mais nublado!",
+  "Você tem um coração dourado e merece todo o sucesso do mundo!",
+  "Sua inteligência e graça fazem toda a diferença!",
+  "Você transforma desafios em oportunidades com graça!",
+  "A generosidade que você espelha é rara e valiosa!",
+  "Sua positividade é como um raio de sol em dias nublados!",
+  "Você merece todos os sonhos que tem no coração!"
+];
+let lastCompliment = -1;
+
+function showRandomCompliment() {
+  let i;
+  do { i = Math.floor(Math.random() * compliments.length); } while (i === lastCompliment);
+  lastCompliment = i;
+  document.getElementById('compliment-text').textContent = compliments[i];
+}
+document.getElementById('btn-next-compliment').addEventListener('click', showRandomCompliment);
+showRandomCompliment();
+
+/* ---------------------------------------------------------
+   VELAS DO BOLO
+--------------------------------------------------------- */
+const btnBlowCandles = document.getElementById('btn-blow-candles');
+const btnRelightCandles = document.getElementById('btn-relight-candles');
+const wishStatus = document.getElementById('wish-status');
+
+function setCandles(lit) {
+  document.querySelectorAll('.candle').forEach(candle => {
+    candle.querySelector('.flame').style.opacity = lit ? '1' : '0';
+    candle.querySelector('.wick').style.background = lit ? '#8b5a2b' : '#5a3b2c';
+    candle.dataset.lit = String(lit);
+  });
+  btnBlowCandles.classList.toggle('hidden', !lit);
+  btnRelightCandles.classList.toggle('hidden', lit);
+  wishStatus.classList.toggle('hidden', lit);
+}
+
+btnBlowCandles.addEventListener('click', () => {
+  setCandles(false);
+  const r = document.getElementById('cake-container').getBoundingClientRect();
+  launchConfetti(r.left + r.width / 2, r.top + r.height / 3, 50);
+  randomFireworks(2);
+});
+btnRelightCandles.addEventListener('click', () => setCandles(true));
+
+/* ---------------------------------------------------------
+   PRESENTE
+--------------------------------------------------------- */
+const interactiveGift = document.getElementById('interactive-gift');
+const giftLetter = document.getElementById('gift-letter');
+
+interactiveGift.addEventListener('click', () => {
+  if (interactiveGift.classList.contains('gift-open')) return;
+  interactiveGift.classList.add('gift-open');
+  giftLetter.classList.add('open');
+  const rect = interactiveGift.getBoundingClientRect();
+  launchConfetti(rect.left + rect.width / 2, rect.top + rect.height / 3, 80);
+});
+
+/* ---------------------------------------------------------
+   BOTÃO PRINCIPAL (HERO)
+--------------------------------------------------------- */
+document.getElementById('btn-trigger-surprise').addEventListener('click', () => {
+  document.getElementById('hero-welcome').classList.add('hidden');
+  document.getElementById('main-celebration').classList.remove('hidden');
+  window.scrollTo({ top: 0 });
+
+  randomFireworks(4);
+  launchConfetti(window.innerWidth / 2, window.innerHeight / 2, 120);
+  confettiRain(100);
+  createBalloons(15);
+
+  // Música (precisa do gesto do usuário, que é este clique)
+  if (!state.musicPlaying) toggleMusic();
+});
+
+/* ---------------------------------------------------------
+   BOTÕES DO TOPO: CONFETES / FOGOS
+--------------------------------------------------------- */
+document.getElementById('btn-more-confetti').addEventListener('click', () => {
+  confettiRain(150);
+  launchConfetti(window.innerWidth / 2, window.innerHeight * 0.6, 80);
+});
+
+document.getElementById('btn-more-fireworks').addEventListener('click', () => randomFireworks(5));
+
+/* ---------------------------------------------------------
+   PERSONALIZAR NOME
+--------------------------------------------------------- */
+const btnEditName = document.getElementById('btn-edit-name');
+const modalName = document.getElementById('modal-name');
+const btnSaveName = document.getElementById('btn-save-name');
+const btnCloseModal = document.getElementById('btn-close-modal');
+const inputCustomName = document.getElementById('input-custom-name');
+const displayNameHero = document.getElementById('display-name-hero');
+const displayNameMain = document.getElementById('display-name-main');
+
+function updateName(newName) {
+  state.userName = newName || 'Aniversariante';
+  displayNameHero.textContent = state.userName;
+  displayNameMain.textContent = state.userName;
+}
+
+function closeModal() {
+  modalName.classList.remove('open');
+  inputCustomName.value = '';
+}
+
+function saveName() {
+  updateName(inputCustomName.value.trim());
+  closeModal();
+}
+
+btnEditName.addEventListener('click', () => {
+  modalName.classList.add('open');
+  setTimeout(() => inputCustomName.focus(), 50);
+});
+btnSaveName.addEventListener('click', saveName);
+btnCloseModal.addEventListener('click', closeModal);
+inputCustomName.addEventListener('keydown', e => { if (e.key === 'Enter') saveName(); });
+modalName.addEventListener('click', e => { if (e.target === modalName) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* ---------------------------------------------------------
+   REPLAY
+--------------------------------------------------------- */
+document.getElementById('btn-replay-all').addEventListener('click', () => location.reload());
+
+/* ---------------------------------------------------------
+   FOGOS AMBIENTE (a cada 7s) + confete de boas-vindas
+--------------------------------------------------------- */
+setInterval(() => {
+  if (document.hidden) return;
+  randomFireworks(1);
+}, 7000);
+
+setTimeout(() => confettiRain(60), 1000);

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feliz Aniversário! 🎉 Uma Surpresa Especial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,600&family=Sacramento&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Canvas de Efeitos (Fogos e Confetes) -->
+  <canvas id="fireworks-canvas"></canvas>
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Container de Balões Voadores -->
+  <div id="balloons-container" aria-hidden="true"></div>
+
+  <!-- Barra de Ferramentas / Controles Flutuantes -->
+  <header class="top-controls">
+    <div class="brand">
+      <span class="brand-badge">✨ Dia Especial</span>
+    </div>
+    <div class="actions">
+      <button id="btn-edit-name" class="control-btn" title="Mudar nome do aniversariante">
+        ✏️ <span class="btn-text">Personalizar</span>
+      </button>
+      <button id="btn-music" class="control-btn" title="Música de Aniversário">
+        🎵 <span class="btn-text">Música: Desligada</span>
+      </button>
+      <button id="btn-more-confetti" class="control-btn accent" title="Lançar mais confetes">
+        🎊 <span class="btn-text">Confetes!</span>
+      </button>
+      <button id="btn-more-fireworks" class="control-btn accent" title="Lançar fogos de artifício">
+        🎆 <span class="btn-text">Fogos!</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- TELA INICIAL: O Convite / Botão da Grande Surpresa -->
+  <section id="hero-welcome" class="hero-screen">
+    <div class="welcome-card glass-panel">
+      <div class="sparkle-icon">✨ 🎂 ✨</div>
+      <p class="greeting-pre">Atenção! Mensagem urgente para...</p>
+      <h1 class="target-name" id="display-name-hero">Pessoa Incrível</h1>
+      <p class="greeting-desc">
+        Hoje é o seu dia especial! Preparamos uma celebração mágica cheia de carinho, surpresas e momentos inesquecíveis.
+      </p>
+      
+      <div class="cta-wrapper">
+        <button id="btn-trigger-surprise" class="magic-button">
+          <span class="button-glow"></span>
+          <span class="button-content">
+            <span class="btn-icon">🎁</span>
+            <span class="btn-title">CLIQUE AQUI PARA ABRIR SUA SURPRESA!</span>
+            <span class="btn-sub">Prepare o som e o coração ❤️</span>
+          </span>
+        </button>
+      </div>
+
+      <div class="hint-text">
+        <small>💡 Dica: Aumente o volume para curtir a trilha sonora comemorativa!</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTEÚDO PRINCIPAL (Aparece após o clique com efeitos) -->
+  <main id="main-celebration" class="main-content hidden">
+
+    <!-- Banner de Felicitações -->
+    <section class="celebration-hero">
+      <div class="badge-ribbon">Parabéns pelo seu dia!</div>
+      <h1 class="headline-title">
+        Feliz Aniversário, <span class="gradient-text" id="display-name-main">Amigo(a)</span>!
+      </h1>
+      <p class="headline-subtitle">
+        Que seu novo ciclo venha carregado de sorrisos, saúde radiante, sonhos realizados e muitas vitórias! 🌟
+      </p>
+
+      <div class="quick-stats">
+        <div class="stat-card glass-panel">
+          <span class="stat-emoji">⏳</span>
+          <span class="stat-number">+1</span>
+          <span class="stat-label">Ano de pura luz e história</span>
+        </div>
+        <div class="stat-card glass-panel">
+          <span class="stat-emoji">💖</span>
+          <span class="stat-number">365</span>
+          <span class="stat-label">Novas chances de ser feliz</span>
+        </div>
+        <div class="stat-card glass-panel">
+          <span class="stat-emoji">🚀</span>
+          <span class="stat-number">100%</span>
+          <span class="stat-label">Motivos para comemorar</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO: O Bolo de Aniversário Interativo -->
+    <section class="section-card glass-panel cake-section">
+      <div class="section-header">
+        <span class="tag">Interativo</span>
+        <h2>Hora do Pedido: Sopre as Velas! 🎂</h2>
+        <p>Pense com muito carinho no seu maior desejo para este ano e clique nas chamas para soprar as velas!</p>
+      </div>
+
+      <div class="cake-container" id="cake-container">
+        <div class="cake">
+          <!-- Velas -->
+          <div class="candles-row">
+            <div class="candle" data-lit="true">
+              <div class="flame"></div>
+              <div class="wick"></div>
+              <div class="candle-stick"></div>
+            </div>
+            <div class="candle center-candle" data-lit="true">
+              <div class="flame"></div>
+              <div class="wick"></div>
+              <div class="candle-stick"></div>
+            </div>
+            <div class="candle" data-lit="true">
+              <div class="flame"></div>
+              <div class="wick"></div>
+              <div class="candle-stick"></div>
+            </div>
+          </div>
+          <!-- Camadas do Bolo -->
+          <div class="cake-tier tier-top">
+            <div class="frosting-drip"></div>
+            <div class="cherries">🍒 🍓 🍒</div>
+          </div>
+          <div class="cake-tier tier-middle">
+            <div class="frosting-drip"></div>
+          </div>
+          <div class="cake-tier tier-bottom">
+            <div class="frosting-drip"></div>
+          </div>
+          <div class="cake-plate"></div>
+        </div>
+
+        <div class="cake-actions">
+          <button id="btn-blow-candles" class="sub-btn">
+            💨 Soprar Todas as Velas!
+          </button>
+          <button id="btn-relight-candles" class="sub-btn secondary hidden">
+            🔥 Acender Velas Novamente
+          </button>
+        </div>
+        
+        <div id="wish-status" class="wish-message hidden">
+          ✨ <strong>Desejo enviado com sucesso para o Universo!</strong> Ele vai se realizar! 🎉
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO: A Caixa de Presente Surpresa Interativa -->
+    <section class="section-card glass-panel gift-section">
+      <div class="section-header">
+        <span class="tag">Surpresa</span>
+        <h2>Sua Caixa de Presente Especial 🎁</h2>
+        <p>Tem uma mensagem secreta guardada aqui dentro especialmente para você. Toque no presente para abrir!</p>
+      </div>
+
+      <div class="gift-wrapper">
+        <div class="gift-box" id="interactive-gift">
+          <div class="gift-lid">
+            <div class="ribbon-bow">🎀</div>
+            <div class="lid-ribbon"></div>
+          </div>
+          <div class="gift-body">
+            <div class="body-ribbon-v"></div>
+            <div class="body-ribbon-h"></div>
+          </div>
+        </div>
+
+        <div class="gift-letter" id="gift-letter">
+          <div class="letter-pin">📌</div>
+          <h3>Uma Carta do Fundo do Coração ❤️</h3>
+          <p class="letter-body">
+            "Que a sua vida seja sempre doce, que não lhe falte motivos para gargalhar, 
+            e que cada novo dia te aproxime dos seus maiores sonhos. Ter você por perto é 
+            um presente sem tamanho. O mundo é muito melhor porque você existe nele!"
+          </p>
+          <p class="letter-signature">
+            Com todo carinho, admiração e amor,<br>
+            <strong>De quem torce muito por você! ✨</strong>
+          </p>
+          <div class="letter-stamp">🎂 NOTA 10/10</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO: Gerador de Elogios e Motivos para Celebrar -->
+    <section class="section-card glass-panel compliments-section">
+      <div class="section-header">
+        <span class="tag">Motivos para Celebrar</span>
+        <h2>Por que você é tão Incrível? 🌟</h2>
+        <p>Clique no botão para sortear uma verdade sobre você hoje:</p>
+      </div>
+
+      <div class="compliment-box">
+        <div class="quote-mark">“</div>
+        <p id="compliment-text" class="compliment-text">
+          Você tem uma energia contagiante que alegra qualquer ambiente em que entra!
+        </p>
+        <button id="btn-next-compliment" class="sub-btn">
+          🎲 Quero outro motivo!
+        </button>
+      </div>
+    </section>
+
+    <!-- SEÇÃO: Mural de Recordações / Fotos -->
+    <section class="section-card glass-panel memories-section">
+      <div class="section-header">
+        <span class="tag">Mural de Afeto</span>
+        <h2>Momentos que Vale a Pena Lembrar 📸</h2>
+        <p>Pequenos pedaços de momentos felizes que merecem ser celebrados!</p>
+      </div>
+
+      <div class="polaroid-grid">
+        <div class="polaroid-card">
+          <div class="tape-strip"></div>
+          <div class="photo-placeholder photo-gradient-1">
+            <span class="photo-emoji">🌻</span>
+          </div>
+          <div class="polaroid-caption">Sempre com um sorriso no rosto</div>
+        </div>
+
+        <div class="polaroid-card rotate-right">
+          <div class="tape-strip"></div>
+          <div class="photo-placeholder photo-gradient-2">
+            <span class="photo-emoji">🥂</span>
+          </div>
+          <div class="polaroid-caption">Brindando a cada conquista</div>
+        </div>
+
+        <div class="polaroid-card rotate-left">
+          <div class="tape-strip"></div>
+          <div class="photo-placeholder photo-gradient-3">
+            <span class="photo-emoji">✈️</span>
+          </div>
+          <div class="polaroid-caption">Pronto para novas aventuras</div>
+        </div>
+
+        <div class="polaroid-card">
+          <div class="tape-strip"></div>
+          <div class="photo-placeholder photo-gradient-4">
+            <span class="photo-emoji">👑</span>
+          </div>
+          <div class="polaroid-caption">A estrela brilhante de hoje</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO: Lançador de Desejos -->
+    <section class="section-card glass-panel wish-launcher-section">
+      <div class="section-header">
+        <span class="tag">Para o Universo</span>
+        <h2>Escreva um Desejo para Este Novo Ano 🌠</h2>
+        <p>Digite uma meta, sonho ou sentimento e lance para o espaço estrelado!</p>
+      </div>
+
+      <div class="wish-form">
+        <input type="text" id="user-wish-input" placeholder="Ex: Viajar pelo mundo, muita paz e sucesso..." maxlength="120" />
+        <button id="btn-send-wish" class="sub-btn accent-gradient">
+          🚀 Lançar Estrela Cadente
+        </button>
+      </div>
+      <div id="wish-feedback" class="wish-feedback"></div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="page-footer">
+      <p>Feito especialmente com muito amor e carinho 💖</p>
+      <p><small>Aperte em qualquer balão que passar na tela para estourá-lo!</small></p>
+      <button id="btn-replay-all" class="sub-btn replay-btn">
+        🔄 Celebrar Tudo de Novo!
+      </button>
+    </footer>
+
+  </main>
+
+  <!-- Modal para Personalizar o Nome -->
+  <div id="modal-name" class="modal-overlay">
+    <div class="modal-box glass-panel">
+      <h3>Personalizar Nome 🎉</h3>
+      <p>Digite o nome do(a) aniversariante para deixar a página com a cara dele(a):</p>
+      <input type="text" id="input-custom-name" placeholder="Nome do aniversariante..." maxlength="30" />
+      <div class="modal-buttons">
+        <button id="btn-save-name" class="sub-btn">Salvar</button>
+        <button id="btn-close-modal" class="sub-btn secondary">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
