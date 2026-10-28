@@ -346,30 +346,62 @@ document.getElementById('btn-next-compliment').addEventListener('click', showRan
 showRandomCompliment();
 
 /* ---------------------------------------------------------
-   VELAS DO BOLO
+   VELAS DO BOLO (clique em cada chama ou use o botão)
 --------------------------------------------------------- */
 const btnBlowCandles = document.getElementById('btn-blow-candles');
 const btnRelightCandles = document.getElementById('btn-relight-candles');
 const wishStatus = document.getElementById('wish-status');
+const cake = document.getElementById('birthday-cake');
+const candleEls = Array.from(document.querySelectorAll('.candle'));
+let blowTimers = [];
 
-function setCandles(lit) {
-  document.querySelectorAll('.candle').forEach(candle => {
-    candle.querySelector('.flame').style.opacity = lit ? '1' : '0';
-    candle.querySelector('.wick').style.background = lit ? '#8b5a2b' : '#5a3b2c';
-    candle.dataset.lit = String(lit);
-  });
-  btnBlowCandles.classList.toggle('hidden', !lit);
-  btnRelightCandles.classList.toggle('hidden', lit);
-  wishStatus.classList.toggle('hidden', lit);
+function finishWish() {
+  cake.classList.add('blown');
+  wishStatus.classList.remove('hidden');
+  btnBlowCandles.classList.add('hidden');
+  btnRelightCandles.classList.remove('hidden');
+  const r = cake.getBoundingClientRect();
+  launchConfetti(r.left + r.width / 2, r.top + r.height / 3, 80);
+  randomFireworks(2);
 }
 
-btnBlowCandles.addEventListener('click', () => {
-  setCandles(false);
-  const r = document.getElementById('cake-container').getBoundingClientRect();
-  launchConfetti(r.left + r.width / 2, r.top + r.height / 3, 50);
-  randomFireworks(2);
+function snuff(candle) {
+  if (candle.classList.contains('out')) return;
+  candle.classList.add('out');
+  candle.dataset.lit = 'false';
+  if (candleEls.every(c => c.classList.contains('out'))) {
+    blowTimers.push(setTimeout(finishWish, 500));
+  }
+}
+
+candleEls.forEach(candle => {
+  candle.addEventListener('click', () => snuff(candle));
+  candle.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      snuff(candle);
+    }
+  });
 });
-btnRelightCandles.addEventListener('click', () => setCandles(true));
+
+btnBlowCandles.addEventListener('click', () => {
+  btnBlowCandles.disabled = true;
+  candleEls.forEach((c, i) => blowTimers.push(setTimeout(() => snuff(c), i * 160)));
+});
+
+btnRelightCandles.addEventListener('click', () => {
+  blowTimers.forEach(clearTimeout);
+  blowTimers = [];
+  candleEls.forEach(c => {
+    c.classList.remove('out');
+    c.dataset.lit = 'true';
+  });
+  cake.classList.remove('blown');
+  wishStatus.classList.add('hidden');
+  btnRelightCandles.classList.add('hidden');
+  btnBlowCandles.classList.remove('hidden');
+  btnBlowCandles.disabled = false;
+});
 
 /* ---------------------------------------------------------
    PRESENTE

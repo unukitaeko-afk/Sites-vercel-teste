@@ -107,38 +107,50 @@
       </div>
 
       <div class="cake-container" id="cake-container">
-        <div class="cake">
-          <!-- Velas -->
-          <div class="candles-row">
-            <div class="candle" data-lit="true">
-              <div class="flame"></div>
-              <div class="wick"></div>
-              <div class="candle-stick"></div>
+        <div class="bc-cake" id="birthday-cake">
+          <div class="bc-glow"></div>
+
+          <!-- Velas (clique na chama para apagar) -->
+          <div class="bc-candles">
+            <div class="candle" data-lit="true" role="button" tabindex="0" aria-label="Apagar vela">
+              <div class="flame"></div><div class="wick"></div><i class="smoke"></i>
             </div>
-            <div class="candle center-candle" data-lit="true">
-              <div class="flame"></div>
-              <div class="wick"></div>
-              <div class="candle-stick"></div>
+            <div class="candle" data-lit="true" role="button" tabindex="0" aria-label="Apagar vela">
+              <div class="flame"></div><div class="wick"></div><i class="smoke"></i>
             </div>
-            <div class="candle" data-lit="true">
-              <div class="flame"></div>
-              <div class="wick"></div>
-              <div class="candle-stick"></div>
+            <div class="candle center-candle" data-lit="true" role="button" tabindex="0" aria-label="Apagar vela">
+              <div class="flame"></div><div class="wick"></div><i class="smoke"></i>
+            </div>
+            <div class="candle" data-lit="true" role="button" tabindex="0" aria-label="Apagar vela">
+              <div class="flame"></div><div class="wick"></div><i class="smoke"></i>
+            </div>
+            <div class="candle" data-lit="true" role="button" tabindex="0" aria-label="Apagar vela">
+              <div class="flame"></div><div class="wick"></div><i class="smoke"></i>
             </div>
           </div>
-          <!-- Camadas do Bolo -->
-          <div class="cake-tier tier-top">
-            <div class="frosting-drip"></div>
-            <div class="cherries">🍒 🍓 🍒</div>
+
+          <!-- Camadas do bolo -->
+          <div class="bc-tier bc-top">
+            <div class="bc-icing"></div>
           </div>
-          <div class="cake-tier tier-middle">
-            <div class="frosting-drip"></div>
+          <div class="bc-tier bc-mid">
+            <div class="bc-icing"></div>
+            <span class="bc-fruit bc-fl">🍓</span>
+            <span class="bc-fruit bc-fr">🍓</span>
           </div>
-          <div class="cake-tier tier-bottom">
-            <div class="frosting-drip"></div>
+          <div class="bc-tier bc-bottom">
+            <div class="bc-icing"></div>
+            <span class="bc-fruit bc-fl">🍒</span>
+            <span class="bc-fruit bc-fr">🍒</span>
+            <span class="bc-script">Parabéns!</span>
           </div>
-          <div class="cake-plate"></div>
+
+          <!-- Prato com pedestal -->
+          <div class="bc-plate"></div>
+          <div class="bc-stem"></div>
+          <div class="bc-base"></div>
         </div>
+
 
         <div class="cake-actions">
           <button id="btn-blow-candles" class="sub-btn">

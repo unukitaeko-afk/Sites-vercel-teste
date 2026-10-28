@@ -380,109 +380,12 @@ canvas {
   align-items: center;
 }
 
-.cake {
-  position: relative;
-  width: 300px;
-  height: 350px;
-  background: linear-gradient(135deg, #ffe4e1, #f8c8d8);
-  border-radius: 0 0 50% 50%;
-  box-shadow: 
-    0 0 0 1px rgba(255,107,107,0.3),
-    0 20px 60px rgba(0,0,0,0.4),
-    0 0 100px rgba(255, 107, 107, 0.2);
-  overflow: hidden;
-  transition: transform 0.3s ease;
-}
 
-.cake:hover {
-  transform: scale(1.02);
-}
 
-.candles-row {
-  position: absolute;
-  top: -30px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
-}
 
-.candle {
-  width: 22px;
-  height: 35px;
-  background: linear-gradient(135deg, #d4a574, #f0e6d2);
-  border-radius: 4px 4px 2px 2px;
-  position: relative;
-}
 
-.candle .flame {
-  position: absolute;
-  top: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-bottom: 12px solid var(--accent-pink);
-  animation: flame-flicker 0.3s ease infinite;
-}
 
-.candle .wick {
-  position: absolute;
-  bottom: -5px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 4px;
-  height: 5px;
-  background: #8b5a2b;
-}
 
-.center-candle .flame {
-  animation-duration: 0.2s;
-}
-
-@keyframes flame-flicker {
-  0%, 100% { transform: translateX(-50%) scaleY(1); }
-  50% { transform: translateX(-50%) scaleY(1.15); }
-}
-
-.cake-tier {
-  width: 80%;
-  max-width: 260px;
-  height: 50px;
-  background: #f5c7ce;
-  border-radius: 0 0 30px 30px;
-  margin: 8px 0;
-  position: relative;
-}
-
-.frosting-drip {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 15px;
-  background: rgba(255, 107, 107, 0.5);
-  border-radius: 50%;
-  animation: drip-fall 2s ease-in-out infinite;
-}
-
-@keyframes drip-fall {
-  0%, 100% { opacity: 1; transform: translateX(-50%) scaleY(1); }
-  50% { opacity: 0.5; transform: translateX(-50%) scaleY(0.6); }
-}
-
-.cherries {
-  position: absolute;
-  bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 6px;
-  font-size: 1.2rem;
-}
 
 .cake-actions {
   margin-top: 1.5rem;
@@ -998,28 +901,10 @@ canvas {
     font-size: 0.65rem;
   }
   
-  .cake {
-    width: 180px;
-    height: 210px;
-  }
   
-  .candle {
-    width: 16px;
-    height: 26px;
-  }
   
-  .candle .flame {
-    border-bottom: 8px solid var(--accent-pink);
-  }
   
-  .candle .wick {
-    width: 3px;
-    height: 4px;
-  }
   
-  .cake-tier {
-    max-width: 180px;
-  }
   
   .gift-box {
     width: 110px;
@@ -1141,10 +1026,6 @@ canvas {
     padding: 0.6rem 0.9rem;
   }
   
-  .cake {
-    width: 240px;
-    height: 280px;
-  }
   
   .gift-box {
     width: 150px;
@@ -1180,10 +1061,6 @@ canvas {
     font-size: 1.1rem;
   }
   
-  .cake {
-    width: 260px;
-    height: 300px;
-  }
   
   .gift-box {
     width: 170px;
@@ -1217,10 +1094,6 @@ canvas {
     font-size: 3rem;
   }
   
-  .cake {
-    width: 300px;
-    height: 350px;
-  }
   
   .gift-box {
     width: 180px;
@@ -1332,4 +1205,301 @@ canvas {
 @keyframes starRise {
   0%   { opacity: 1; transform: translate(-50%, 0) scale(1) rotate(0deg); }
   100% { opacity: 0; transform: translate(-50%, -70vh) scale(2.2) rotate(360deg); }
+}
+
+/* ===========================================================
+   BOLO DE ANIVERSÁRIO (3 andares, velas com chama e fumaça)
+=========================================================== */
+.cake-section { overflow: visible; }
+
+.bc-cake {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 330px;
+  padding-top: 10px;
+}
+
+/* brilho quente das velas */
+.bc-glow {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  width: 380px;
+  height: 230px;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at 50% 40%, rgba(255, 176, 70, 0.32), rgba(255, 107, 107, 0.10) 50%, transparent 72%);
+  pointer-events: none;
+  z-index: 0;
+  animation: glow-pulse 2.4s ease-in-out infinite;
+  transition: opacity 1.2s ease;
+}
+.bc-cake.blown .bc-glow { opacity: 0; animation: none; }
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.85; }
+  50%      { opacity: 1; }
+}
+
+/* ---------- Velas ---------- */
+.bc-candles {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  padding-top: 36px;
+  margin-bottom: -6px;
+}
+
+.candle {
+  --cc: #ff6b6b;
+  position: relative;
+  width: 12px;
+  height: 38px;
+  border-radius: 3px 3px 1px 1px;
+  background: repeating-linear-gradient(-45deg, var(--cc) 0 6px, #ffffff 6px 12px);
+  box-shadow: inset -3px 0 4px rgba(0, 0, 0, 0.18), 0 2px 4px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  outline: none;
+}
+.candle:nth-child(1) { --cc: #ff6b6b; }
+.candle:nth-child(2) { --cc: #4ecdc4; height: 42px; }
+.candle:nth-child(3) { --cc: #ffd93d; height: 48px; }
+.candle:nth-child(4) { --cc: #a78bfa; height: 42px; }
+.candle:nth-child(5) { --cc: #ff9ff3; }
+
+/* área de toque maior (chama + vela) */
+.candle::before {
+  content: '';
+  position: absolute;
+  inset: -34px -8px 0 -8px;
+}
+.candle:focus-visible { box-shadow: 0 0 0 2px var(--accent-gold); }
+
+.candle .wick {
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 2px;
+  height: 6px;
+  margin-left: -1px;
+  border-radius: 1px;
+  background: #2b1b14;
+}
+
+/* chama em forma de gota */
+.candle .flame {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 3px);
+  width: 14px;
+  height: 20px;
+  margin-left: -7px;
+  transform-origin: 50% 100%;
+  isolation: isolate;
+  filter: drop-shadow(0 0 6px rgba(255, 170, 50, 0.95));
+  animation: flame-flicker 0.55s ease-in-out infinite;
+}
+.candle:nth-child(2) .flame { animation-delay: -0.15s; }
+.candle:nth-child(3) .flame { animation-delay: -0.3s; animation-duration: 0.45s; }
+.candle:nth-child(4) .flame { animation-delay: -0.1s; }
+.candle:nth-child(5) .flame { animation-delay: -0.4s; }
+
+.candle .flame::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50% 0 50% 50%;
+  transform: rotate(-45deg);
+  background: radial-gradient(circle at 45% 65%, #fffbd0 0%, #ffd34d 40%, #ff8a1f 80%, #ff5a1f 100%);
+}
+.candle .flame::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  width: 52px;
+  height: 52px;
+  margin: -26px 0 0 -26px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 196, 90, 0.5), transparent 70%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+@keyframes flame-flicker {
+  0%, 100% { transform: scale(1, 1) rotate(0deg); }
+  25%      { transform: scale(0.94, 1.1) rotate(-3deg); }
+  50%      { transform: scale(1.05, 0.95) rotate(2deg); }
+  75%      { transform: scale(0.97, 1.08) rotate(-1deg); }
+}
+
+/* vela apagada: chama some, pavio fica em brasa, sobe fumaça */
+.candle.out .flame {
+  animation: none;
+  opacity: 0;
+  transform: scale(0.2) translateY(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.candle.out .wick { animation: ember 1.8s ease-out forwards; }
+
+@keyframes ember {
+  0%   { background: #ff6a2b; box-shadow: 0 0 6px 2px rgba(255, 120, 40, 0.9); }
+  100% { background: #2b1b14; box-shadow: none; }
+}
+
+.candle .smoke {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  border-radius: 50%;
+  background: rgba(235, 235, 245, 0.55);
+  filter: blur(3px);
+  opacity: 0;
+  pointer-events: none;
+}
+.candle.out .smoke { animation: smoke-rise 2.8s ease-out 0.1s forwards; }
+.candle:nth-child(even).out .smoke { animation-name: smoke-rise-b; }
+
+@keyframes smoke-rise {
+  0%   { opacity: 0;   transform: translate(0, 0) scale(0.6); }
+  15%  { opacity: 0.75; }
+  50%  { transform: translate(8px, -38px) scale(1.7); }
+  100% { opacity: 0;   transform: translate(-6px, -90px) scale(3.2); }
+}
+@keyframes smoke-rise-b {
+  0%   { opacity: 0;   transform: translate(0, 0) scale(0.6); }
+  15%  { opacity: 0.75; }
+  50%  { transform: translate(-9px, -38px) scale(1.7); }
+  100% { opacity: 0;   transform: translate(7px, -90px) scale(3.2); }
+}
+
+/* ---------- Andares ---------- */
+.bc-tier {
+  position: relative;
+  width: var(--w);
+  height: var(--h);
+  border-radius: 14px 14px 18px 18px;
+  box-shadow:
+    inset 0 -12px 20px rgba(0, 0, 0, 0.18),
+    inset 0 6px 8px rgba(255, 255, 255, 0.14),
+    0 6px 14px rgba(0, 0, 0, 0.35);
+}
+
+.bc-top    { --w: 150px; --h: 62px; --ic: #ffffff; background: linear-gradient(180deg, #ffc9d6, #f59ab5); z-index: 3; }
+.bc-mid    { --w: 214px; --h: 70px; --ic: #ff8fab; background: linear-gradient(180deg, #fff0d6, #f3c98f); z-index: 2; margin-top: -8px; }
+.bc-bottom { --w: 280px; --h: 84px; --ic: #ffc9d9; background: linear-gradient(180deg, #7a4331, #4b2417); z-index: 1; margin-top: -8px; }
+
+/* glacê com gotas escorrendo */
+.bc-icing {
+  position: absolute;
+  top: -3px;
+  left: 0;
+  right: 0;
+  height: 46px;
+  border-radius: 14px 14px 0 0;
+  filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.2));
+  background:
+    linear-gradient(var(--ic), var(--ic)) 0 0 / 100% 24px no-repeat,
+    radial-gradient(circle 8px at 11px 27px, var(--ic) 97%, transparent 100%) 0 0 / 22px 100% repeat-x,
+    linear-gradient(90deg, transparent 0 16px, var(--ic) 16px 30px, transparent 30px) 0 0 / 46px 38px repeat-x,
+    radial-gradient(circle 7px at 23px 38px, var(--ic) 97%, transparent 100%) 0 0 / 46px 100% repeat-x;
+}
+
+/* pérolas no andar do meio */
+.bc-mid::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 7px;
+  height: 8px;
+  background: radial-gradient(circle 3.5px at 50% 50%, #ffffff 90%, transparent 100%) 0 0 / 14px 8px repeat-x;
+  opacity: 0.95;
+}
+
+/* granulado no andar de baixo */
+.bc-bottom::after {
+  content: '';
+  position: absolute;
+  inset: 40px 0 0 0;
+  background:
+    radial-gradient(circle 2px at 8% 30%,  #ffd93d 90%, transparent) ,
+    radial-gradient(circle 2px at 20% 75%, #4ecdc4 90%, transparent),
+    radial-gradient(circle 2px at 33% 20%, #ff9ff3 90%, transparent),
+    radial-gradient(circle 2px at 47% 80%, #ffd93d 90%, transparent),
+    radial-gradient(circle 2px at 60% 25%, #74b9ff 90%, transparent),
+    radial-gradient(circle 2px at 72% 78%, #ff6b6b 90%, transparent),
+    radial-gradient(circle 2px at 85% 30%, #1dd1a1 90%, transparent),
+    radial-gradient(circle 2px at 94% 70%, #ffd93d 90%, transparent);
+  pointer-events: none;
+}
+
+.bc-script {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 8px;
+  z-index: 2;
+  text-align: center;
+  font-family: 'Sacramento', cursive;
+  font-size: 2rem;
+  line-height: 1;
+  color: #ffe3ec;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.45);
+}
+
+.bc-fruit {
+  position: absolute;
+  top: -16px;
+  z-index: 2;
+  font-size: 1.15rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.35));
+}
+.bc-fl { left: 6px; }
+.bc-fr { right: 6px; }
+
+/* ---------- Prato / pedestal ---------- */
+.bc-plate {
+  position: relative;
+  z-index: 4;
+  width: 336px;
+  height: 16px;
+  margin-top: -6px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #fbfbff, #b4b8cc);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45), inset 0 -2px 3px rgba(0, 0, 0, 0.15);
+}
+.bc-stem {
+  width: 22px;
+  height: 26px;
+  background: linear-gradient(90deg, #9ea3b8, #f5f6fb 50%, #9ea3b8);
+}
+.bc-base {
+  width: 120px;
+  height: 10px;
+  border-radius: 50% 50% 8px 8px / 100% 100% 8px 8px;
+  background: linear-gradient(180deg, #e8eaf3, #9ea3b8);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.wish-message { animation: fadeIn 0.6s ease; }
+
+@media (max-width: 480px) {
+  .bc-cake { transform: scale(0.82); transform-origin: top center; margin-bottom: -58px; }
+}
+@media (max-width: 360px) {
+  .bc-cake { transform: scale(0.7); margin-bottom: -98px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .candle .flame, .bc-glow { animation: none; }
 }
