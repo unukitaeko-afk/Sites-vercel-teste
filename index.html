@@ -24,6 +24,9 @@
       <span class="brand-badge">✨ Dia Especial</span>
     </div>
     <div class="actions">
+      <button id="btn-edit-name" class="control-btn" title="Mudar nome do aniversariante">
+        ✏️ <span class="btn-text">Personalizar</span>
+      </button>
       <button id="btn-music" class="control-btn" title="Música de Aniversário">
         🎵 <span class="btn-text">Música: Desligada</span>
       </button>
@@ -241,9 +244,9 @@
       </div>
 
       <div class="wish-form">
-        <input type="text" id="user-wish-input" placeholder="Ex: Viajar pelo mundo, muita paz e sucesso..." maxlength="120" />
+        <input type="text" id="user-wish-input" placeholder="" maxlength="120" />
         <button id="btn-send-wish" class="sub-btn accent-gradient">
-          🚀 Lançar Estrela Cadente
+          Lançar Estrela Cadente
         </button>
       </div>
       <div id="wish-feedback" class="wish-feedback"></div>
@@ -260,6 +263,18 @@
 
   </main>
 
+  <!-- Modal para Personalizar o Nome -->
+  <div id="modal-name" class="modal-overlay">
+    <div class="modal-box glass-panel">
+      <h3>Personalizar Nome 🎉</h3>
+      <p>Digite o nome do(a) aniversariante para deixar a página com a cara dele(a):</p>
+      <input type="text" id="input-custom-name" placeholder="Nome do aniversariante..." maxlength="30" />
+      <div class="modal-buttons">
+        <button id="btn-save-name" class="sub-btn">Salvar</button>
+        <button id="btn-close-modal" class="sub-btn secondary">Cancelar</button>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
