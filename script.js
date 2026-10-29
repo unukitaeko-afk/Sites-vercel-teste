@@ -1,4 +1,21 @@
 // ===========================================================
+// ✏️  SUAS FOTOS — edite só esta lista
+// -----------------------------------------------------------
+// 1) Coloque as fotos na pasta "fotos" (ao lado do index.html)
+// 2) Use nomes simples, sem espaço nem acento: foto1.jpg, foto2.jpg...
+// 3) Em "arquivo" escreva o nome (com ou sem extensão).
+//    Sem extensão, o site tenta jpg, jpeg, png, webp...
+// 4) Para ter mais fotos, copie uma linha e mude o nome e a legenda.
+// Se a foto não existir, aparece o desenho colorido no lugar.
+// ===========================================================
+const FOTOS = [
+  { arquivo: 'foto1', legenda: 'Sempre com um sorriso no rosto', emoji: '🌻' },
+  { arquivo: 'foto2', legenda: 'Brindando a cada conquista',     emoji: '🥂' },
+  { arquivo: 'foto3', legenda: 'Pronto para novas aventuras',    emoji: '✈️' },
+  { arquivo: 'foto4', legenda: 'A estrela brilhante de hoje',    emoji: '👑' }
+];
+
+// ===========================================================
 // FELIZ ANIVERSÁRIO — fogos, confetes, balões, música e interações
 // ===========================================================
 
@@ -495,3 +512,87 @@ setInterval(() => {
 }, 7000);
 
 setTimeout(() => confettiRain(60), 1000);
+
+/* ---------------------------------------------------------
+   MURAL DE FOTOS (polaroids montadas a partir da lista FOTOS)
+--------------------------------------------------------- */
+const EXTENSOES_FOTO = ['jpg', 'jpeg', 'png', 'webp', 'jfif', 'JPG', 'JPEG', 'PNG'];
+const photoGrid = document.getElementById('polaroid-grid');
+let photoLightbox = null;
+
+function openLightbox(src, legenda) {
+  if (!photoLightbox) {
+    photoLightbox = document.createElement('div');
+    photoLightbox.className = 'photo-lightbox';
+    photoLightbox.innerHTML = '<img alt=""><p></p>';
+    photoLightbox.addEventListener('click', closeLightbox);
+    document.body.appendChild(photoLightbox);
+  }
+  photoLightbox.querySelector('img').src = src;
+  photoLightbox.querySelector('img').alt = legenda;
+  photoLightbox.querySelector('p').textContent = legenda;
+  photoLightbox.classList.add('open');
+}
+
+function closeLightbox() {
+  if (photoLightbox) photoLightbox.classList.remove('open');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+function renderMural() {
+  if (!photoGrid) return;
+
+  FOTOS.forEach((foto, i) => {
+    const card = document.createElement('figure');
+    card.className = 'polaroid-card';
+
+    const tape = document.createElement('div');
+    tape.className = 'tape-strip';
+
+    const frame = document.createElement('div');
+    frame.className = 'photo-frame';
+
+    // desenho colorido que aparece enquanto a foto não existe/carrega
+    const fallback = document.createElement('div');
+    fallback.className = `photo-fallback photo-gradient-${(i % 4) + 1}`;
+    fallback.textContent = foto.emoji || '📷';
+
+    const caption = document.createElement('figcaption');
+    caption.className = 'polaroid-caption';
+    caption.textContent = foto.legenda || '';
+
+    // tenta as extensões uma a uma até achar o arquivo
+    const nomes = foto.arquivo.includes('.')
+      ? [foto.arquivo]
+      : EXTENSOES_FOTO.map(ext => `${foto.arquivo}.${ext}`);
+    const caminhos = nomes.map(n => `fotos/${n}`);
+
+    const img = new Image();
+    img.alt = foto.legenda || '';
+    img.decoding = 'async';
+    let tentativa = 0;
+
+    img.onload = () => {
+      frame.classList.add('has-img');
+      card.classList.add('clickable');
+    };
+    img.onerror = () => {
+      tentativa++;
+      if (tentativa < caminhos.length) {
+        img.src = caminhos[tentativa];
+      } else {
+        img.remove(); // nenhuma foto encontrada: fica só o desenho
+      }
+    };
+    img.src = caminhos[0];
+
+    card.addEventListener('click', () => {
+      if (card.classList.contains('clickable')) openLightbox(img.src, foto.legenda || '');
+    });
+
+    frame.append(fallback, img);
+    card.append(tape, frame, caption);
+    photoGrid.appendChild(card);
+  });
+}
+renderMural();
