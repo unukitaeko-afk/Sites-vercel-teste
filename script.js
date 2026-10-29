@@ -16,13 +16,29 @@ const FOTOS = [
 ];
 
 // ===========================================================
+// ⚙️  AJUSTES
+// -----------------------------------------------------------
+// BALOES_PARA_POPUP: quantos balões a pessoa precisa estourar
+//                    para aparecer o pop-up (edite o texto dele no index.html).
+// WEB3FORMS_KEY:     chave para você receber os desejos por e-mail.
+//                    1) Entre em web3forms.com e peça sua "Access Key"
+//                       (ela chega no seu e-mail, é grátis).
+//                    2) Cole a chave entre as aspas abaixo.
+//                    Deixe vazio ('') para NÃO enviar nada.
+// ===========================================================
+const BALOES_PARA_POPUP = 10;
+const WEB3FORMS_KEY = '';
+
+// ===========================================================
 // FELIZ ANIVERSÁRIO — fogos, confetes, balões, música e interações
 // ===========================================================
 
 const state = {
   userName: 'Aniversariante',
   musicPlaying: false,
-  wishes: []
+  wishes: [],
+  balloonsPopped: 0,
+  popupShown: false
 };
 
 /* ---------------------------------------------------------
@@ -198,6 +214,7 @@ function createBalloons(count = 15) {
         const r = balloon.getBoundingClientRect();
         launchConfetti(r.left + r.width / 2, r.top + r.height / 2, 40);
         balloon.remove();
+        registrarBalaoEstourado();
       });
       balloon.addEventListener('animationend', () => balloon.remove());
 
@@ -299,6 +316,29 @@ function createStars() {
 createStars();
 
 /* ---------------------------------------------------------
+   ENVIO DO DESEJO POR E-MAIL (Web3Forms)
+--------------------------------------------------------- */
+async function enviarDesejo(texto) {
+  if (!WEB3FORMS_KEY) return false;
+  try {
+    const resp = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_KEY,
+        subject: '🌠 Novo desejo no site de aniversário',
+        from_name: 'Site de aniversário',
+        message: texto
+      })
+    });
+    const data = await resp.json();
+    return data.success === true;
+  } catch (e) {
+    return false;
+  }
+}
+
+/* ---------------------------------------------------------
    LANÇADOR DE DESEJOS
 --------------------------------------------------------- */
 const wishInput = document.getElementById('user-wish-input');
@@ -330,7 +370,12 @@ function sendWish() {
   wishInput.value = '';
 
   clearTimeout(wishFeedbackTimer);
-  wishFeedbackTimer = setTimeout(() => wishFeedback.classList.remove('show'), 4000);
+  // envia uma cópia para o seu e-mail (se a chave estiver configurada)
+  enviarDesejo(text).then(ok => {
+    if (ok) wishFeedback.textContent = `✨ Seu desejo "${text}" foi enviado ao Universo (e ao Enzo)! 💌`;
+  });
+
+  wishFeedbackTimer = setTimeout(() => wishFeedback.classList.remove('show'), 6000);
 }
 
 btnSendWish.addEventListener('click', sendWish);
@@ -421,18 +466,41 @@ btnRelightCandles.addEventListener('click', () => {
 });
 
 /* ---------------------------------------------------------
-   PRESENTE
+   CARTA (envelope abre e a carta sai)
 --------------------------------------------------------- */
-const interactiveGift = document.getElementById('interactive-gift');
-const giftLetter = document.getElementById('gift-letter');
+const envelope = document.getElementById('envelope');
+const envelopeScene = document.getElementById('envelope-scene');
+const carta = document.getElementById('carta');
+let cartaTimer = null;
 
-interactiveGift.addEventListener('click', () => {
-  if (interactiveGift.classList.contains('gift-open')) return;
-  interactiveGift.classList.add('gift-open');
-  giftLetter.classList.add('open');
-  const rect = interactiveGift.getBoundingClientRect();
-  launchConfetti(rect.left + rect.width / 2, rect.top + rect.height / 3, 80);
+function abrirCarta() {
+  if (envelopeScene.classList.contains('is-open')) return;
+  envelopeScene.classList.add('is-open'); // aba abre e o papel sobe
+
+  const r = envelope.getBoundingClientRect();
+  launchConfetti(r.left + r.width / 2, r.top + r.height / 3, 35);
+
+  // depois da animação do papel, a carta aparece aberta
+  cartaTimer = setTimeout(() => {
+    envelopeScene.classList.add('reading');
+    carta.classList.add('show');
+    const c = carta.getBoundingClientRect();
+    launchConfetti(c.left + c.width / 2, c.top + 40, 60);
+    carta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 1700);
+}
+
+function fecharCarta() {
+  clearTimeout(cartaTimer);
+  carta.classList.remove('show');
+  envelopeScene.classList.remove('reading', 'is-open');
+}
+
+envelope.addEventListener('click', abrirCarta);
+envelope.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrirCarta(); }
 });
+document.getElementById('btn-close-carta').addEventListener('click', fecharCarta);
 
 /* ---------------------------------------------------------
    BOTÃO PRINCIPAL (HERO)
@@ -460,6 +528,7 @@ document.getElementById('btn-more-confetti')?.addEventListener('click', () => {
 });
 
 document.getElementById('btn-more-fireworks')?.addEventListener('click', () => randomFireworks(5));
+document.getElementById('btn-more-balloons')?.addEventListener('click', () => createBalloons(15));
 
 /* ---------------------------------------------------------
    REPLAY
@@ -559,3 +628,28 @@ function renderMural() {
   });
 }
 renderMural();
+
+/* ---------------------------------------------------------
+   POP-UP DOS BALÕES (aparece uma vez, ao estourar BALOES_PARA_POPUP)
+--------------------------------------------------------- */
+const popupBaloes = document.getElementById('popup-baloes');
+
+function registrarBalaoEstourado() {
+  state.balloonsPopped++;
+  if (!state.popupShown && state.balloonsPopped >= BALOES_PARA_POPUP) {
+    state.popupShown = true;
+    setTimeout(abrirPopupBaloes, 400);
+  }
+}
+function abrirPopupBaloes() {
+  popupBaloes.classList.add('open');
+  launchConfetti(window.innerWidth / 2, window.innerHeight / 2, 100);
+}
+function fecharPopupBaloes() { popupBaloes.classList.remove('open'); }
+
+document.getElementById('btn-close-popup').addEventListener('click', fecharPopupBaloes);
+popupBaloes.addEventListener('click', e => { if (e.target === popupBaloes) fecharPopupBaloes(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharPopupBaloes(); });
+
+// só mostra o aviso "o desejo também é enviado" se o envio estiver configurado
+if (WEB3FORMS_KEY) document.getElementById('wish-aviso')?.classList.remove('hidden');

@@ -6,7 +6,7 @@
   <title>Feliz Aniversário! 🎉 Uma Surpresa Especial</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,600&family=Sacramento&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,600&family=Sacramento&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -33,6 +33,9 @@
       <button id="btn-more-fireworks" class="control-btn accent" title="Lançar fogos de artifício">
         🎆 <span class="btn-text">Fogos!</span>
       </button>
+      <button id="btn-more-balloons" class="control-btn accent" title="Soltar mais balões">
+        🎈 <span class="btn-text">Balões!</span>
+      </button>
     </div>
   </header>
 
@@ -43,7 +46,7 @@
       <p class="greeting-pre">Atenção! Mensagem urgente para...</p>
       <h1 class="target-name" id="display-name-hero">Pessoa Incrível</h1>
       <p class="greeting-desc">
-        Hoje é o seu dia especial! Preparamos uma celebração mágica cheia de carinho, surpresas e momentos inesquecíveis.
+        Hoje é o seu dia especial! Preparei um pequeno presente (pq eu to muito sem criatividade).
       </p>
       
       <div class="cta-wrapper">
@@ -58,7 +61,7 @@
       </div>
 
       <div class="hint-text">
-        <small>💡 Dica: Aumente o volume para curtir a trilha sonora comemorativa!</small>
+        <small> ps: Espero que goste</small>
       </div>
     </div>
   </section>
@@ -70,7 +73,7 @@
     <section class="celebration-hero">
       <div class="badge-ribbon">Parabéns pelo seu dia!</div>
       <h1 class="headline-title">
-        Feliz Aniversário, <span class="gradient-text" id="display-name-main">Amigo(a)</span>!
+        Feliz Aniversário, <span class="gradient-text" id="display-name-main">Duda</span>!
       </h1>
       <p class="headline-subtitle">
         Que seu novo ciclo venha carregado de sorrisos, saúde radiante, sonhos realizados e muitas vitórias! 🌟
@@ -164,40 +167,44 @@
       </div>
     </section>
 
-    <!-- SEÇÃO: A Caixa de Presente Surpresa Interativa -->
+    <!-- SEÇÃO: A Carta (envelope que abre) -->
     <section class="section-card glass-panel gift-section">
       <div class="section-header">
         <span class="tag">Surpresa</span>
-        <h2>Sua Caixa de Presente Especial 🎁</h2>
-        <p>Tem uma mensagem secreta guardada aqui dentro especialmente para você. Toque no presente para abrir!</p>
+        <h2>Uma Carta Para Você 💌</h2>
+        <p>Tem uma mensagem guardada aqui dentro especialmente para você. Toque no envelope para abrir!</p>
       </div>
 
-      <div class="gift-wrapper">
-        <div class="gift-box" id="interactive-gift">
-          <div class="gift-lid">
-            <div class="ribbon-bow">🎀</div>
-            <div class="lid-ribbon"></div>
-          </div>
-          <div class="gift-body">
-            <div class="body-ribbon-v"></div>
-            <div class="body-ribbon-h"></div>
-          </div>
+      <div class="envelope-scene" id="envelope-scene">
+        <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Abrir a carta">
+          <div class="env-back"></div>
+          <div class="env-paper"><span></span><span></span><span></span><span></span></div>
+          <div class="env-front"></div>
+          <div class="env-flap"></div>
+          <div class="env-seal">♥</div>
         </div>
+        <p class="envelope-hint">Toque para abrir 💌</p>
 
-        <div class="gift-letter" id="gift-letter">
-          <div class="letter-pin">📌</div>
-          <h3>Uma Carta do Fundo do Coração ❤️</h3>
-          <p class="letter-body">
-            "Que a sua vida seja sempre doce, que não lhe falte motivos para gargalhar, 
-            e que cada novo dia te aproxime dos seus maiores sonhos. Ter você por perto é 
-            um presente sem tamanho. O mundo é muito melhor porque você existe nele!"
+        <!--
+          ✏️ PERSONALIZE A CARTA:
+          - Troque os textos abaixo (título, mensagem, assinatura, selo).
+          - Troque o fundo mudando o tema na class: tema-papel | tema-rosa | tema-noite | tema-imagem
+            (tema-imagem usa a foto fotos/carta-fundo.jpg; as cores ficam no fim do style.css)
+        -->
+        <article class="carta tema-papel" id="carta">
+          <h3 class="carta-titulo">Uma Carta do Fundo do Coração ❤️</h3>
+          <p class="carta-texto">
+            "Que a sua vida seja sempre doce, como você mesma já é, que não lhe falte motivos para gargalhar,
+            e que cada novo dia te aproxime dos seus maiores sonhos. Ter você por perto é
+            bem melhor."
           </p>
-          <p class="letter-signature">
+          <p class="carta-assinatura">
             Com todo carinho, admiração e amor,<br>
-            <strong>De quem torce muito por você! ✨</strong>
+            <strong>Do seu amigo Enzo! ✨</strong>
           </p>
-          <div class="letter-stamp">🎂 NOTA 10/10</div>
-        </div>
+          <div class="carta-selo">🎂 NOTA 10/10</div>
+          <button id="btn-close-carta" class="sub-btn secondary">✉️ Guardar a carta</button>
+        </article>
       </div>
     </section>
 
@@ -215,7 +222,7 @@
           Você tem uma energia contagiante que alegra qualquer ambiente em que entra!
         </p>
         <button id="btn-next-compliment" class="sub-btn">
-          🎲 Quero outro motivo!
+          Quero outro motivo!
         </button>
       </div>
     </section>
@@ -225,7 +232,7 @@
       <div class="section-header">
         <span class="tag">Mural de Afeto</span>
         <h2>Momentos que Vale a Pena Lembrar 📸</h2>
-        <p>Pequenos pedaços de momentos felizes que merecem ser celebrados!</p>
+        <p>Eu infelizmente não tenho fotos contigo, então separei alguns momentos que devem ser importantes para você</p>
       </div>
 
       <!-- As fotos são montadas pelo script.js (lista FOTOS, no topo do arquivo) -->
@@ -241,12 +248,13 @@
       </div>
 
       <div class="wish-form">
-        <input type="text" id="user-wish-input" placeholder="Ex: Viajar pelo mundo, muita paz e sucesso..." maxlength="120" />
+        <input type="text" id="user-wish-input" placeholder="" maxlength="120" />
         <button id="btn-send-wish" class="sub-btn accent-gradient">
-          🚀 Lançar Estrela Cadente
+          Lançar Estrela Cadente
         </button>
       </div>
       <div id="wish-feedback" class="wish-feedback"></div>
+      <p id="wish-aviso" class="wish-aviso hidden">💌 O desejo também é enviado para o Enzo.</p>
     </section>
 
     <!-- Rodapé -->
@@ -254,12 +262,27 @@
       <p>Feito especialmente com muito amor e carinho 💖</p>
       <p><small>Aperte em qualquer balão que passar na tela para estourá-lo!</small></p>
       <button id="btn-replay-all" class="sub-btn replay-btn">
-        🔄 Celebrar Tudo de Novo!
+       Se quiser ir ver de novo
       </button>
     </footer>
 
   </main>
-
+<!-- Pop-up que aparece quando estouram 10 balões (o número fica no topo do script.js) -->
+  <div id="popup-baloes" class="modal-overlay">
+    <div class="modal-box glass-panel popup-baloes-box">
+      <!--
+        ✏️ PERSONALIZE AQUI: troque o emoji, o título e o texto.
+        Para colocar uma foto, salve em fotos/popup.jpg e tire as setas de comentário da linha da imagem.
+      -->
+      <div class="popup-emoji">🎈</div>
+      <h3>10 balões estourados! 🎉</h3>
+      <p>Você tem muito talento para estourar balões!<br>Troque este texto pelo seu recado. 😄</p>
+      <!-- <img src="fotos/popup.jpg" alt=""> -->
+      <div class="modal-buttons">
+        <button id="btn-close-popup" class="sub-btn">Fechar</button>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
