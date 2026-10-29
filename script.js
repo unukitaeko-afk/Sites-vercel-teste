@@ -462,43 +462,6 @@ document.getElementById('btn-more-confetti')?.addEventListener('click', () => {
 document.getElementById('btn-more-fireworks')?.addEventListener('click', () => randomFireworks(5));
 
 /* ---------------------------------------------------------
-   PERSONALIZAR NOME
---------------------------------------------------------- */
-const btnEditName = document.getElementById('btn-edit-name');
-const modalName = document.getElementById('modal-name');
-const btnSaveName = document.getElementById('btn-save-name');
-const btnCloseModal = document.getElementById('btn-close-modal');
-const inputCustomName = document.getElementById('input-custom-name');
-const displayNameHero = document.getElementById('display-name-hero');
-const displayNameMain = document.getElementById('display-name-main');
-
-function updateName(newName) {
-  state.userName = newName || 'Aniversariante';
-  displayNameHero.textContent = state.userName;
-  displayNameMain.textContent = state.userName;
-}
-
-function closeModal() {
-  modalName.classList.remove('open');
-  inputCustomName.value = '';
-}
-
-function saveName() {
-  updateName(inputCustomName.value.trim());
-  closeModal();
-}
-
-btnEditName?.addEventListener('click', () => {
-  modalName.classList.add('open');
-  setTimeout(() => inputCustomName.focus(), 50);
-});
-btnSaveName.addEventListener('click', saveName);
-btnCloseModal.addEventListener('click', closeModal);
-inputCustomName.addEventListener('keydown', e => { if (e.key === 'Enter') saveName(); });
-modalName.addEventListener('click', e => { if (e.target === modalName) closeModal(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-/* ---------------------------------------------------------
    REPLAY
 --------------------------------------------------------- */
 document.getElementById('btn-replay-all').addEventListener('click', () => location.reload());
