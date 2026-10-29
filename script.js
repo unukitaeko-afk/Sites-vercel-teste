@@ -254,7 +254,7 @@ function playLoop() {
 }
 
 function setMusicLabel() {
-  btnMusic.innerHTML = `🎵 <span class="btn-text">Música: ${state.musicPlaying ? 'Ligada' : 'Desligada'}</span>`;
+  if (btnMusic) btnMusic.innerHTML = `🎵 <span class="btn-text">Música: ${state.musicPlaying ? 'Ligada' : 'Desligada'}</span>`;
 }
 
 function toggleMusic() {
@@ -278,7 +278,7 @@ function toggleMusic() {
   setMusicLabel();
 }
 
-btnMusic.addEventListener('click', toggleMusic);
+if (btnMusic) btnMusic.addEventListener('click', toggleMusic);
 
 /* ---------------------------------------------------------
    ESTRELAS DECORATIVAS DE FUNDO
@@ -454,12 +454,12 @@ document.getElementById('btn-trigger-surprise').addEventListener('click', () => 
 /* ---------------------------------------------------------
    BOTÕES DO TOPO: CONFETES / FOGOS
 --------------------------------------------------------- */
-document.getElementById('btn-more-confetti').addEventListener('click', () => {
+document.getElementById('btn-more-confetti')?.addEventListener('click', () => {
   confettiRain(150);
   launchConfetti(window.innerWidth / 2, window.innerHeight * 0.6, 80);
 });
 
-document.getElementById('btn-more-fireworks').addEventListener('click', () => randomFireworks(5));
+document.getElementById('btn-more-fireworks')?.addEventListener('click', () => randomFireworks(5));
 
 /* ---------------------------------------------------------
    PERSONALIZAR NOME
@@ -488,7 +488,7 @@ function saveName() {
   closeModal();
 }
 
-btnEditName.addEventListener('click', () => {
+btnEditName?.addEventListener('click', () => {
   modalName.classList.add('open');
   setTimeout(() => inputCustomName.focus(), 50);
 });
