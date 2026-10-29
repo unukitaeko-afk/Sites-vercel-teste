@@ -11,7 +11,7 @@
 const FOTOS = [
   { arquivo: 'foto1', legenda: 'Sempre com um sorriso no rosto', emoji: '🌻' },
   { arquivo: 'foto2', legenda: 'Brindando a cada conquista',     emoji: '🥂' },
-  { arquivo: 'foto3', legenda: 'Pronto para novas aventuras',    emoji: '✈️' },
+  { arquivo: 'foto3', legenda: 'Pronta para novas aventuras',    emoji: '✈️' },
   { arquivo: 'foto4', legenda: 'A estrela brilhante de hoje',    emoji: '👑' }
 ];
 
