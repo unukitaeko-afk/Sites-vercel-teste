@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feliz Aniversário! 🎉 Uma Surpresa Especial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,600&family=Sacramento&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Canvas de Efeitos (Fogos e Confetes) -->
+  <canvas id="fireworks-canvas"></canvas>
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Container de Balões Voadores -->
+  <div id="balloons-container" aria-hidden="true"></div>
+
+  <!-- Barra de Ferramentas / Controles Flutuantes -->
+  <header class="top-controls">
+    <div class="brand">
+      <span class="brand-badge">✨ Dia Especial</span>
+    </div>
+    <div class="actions">
+      <button id="btn-music" class="control-btn" title="Música de Aniversário">
+        🎵 <span class="btn-text">Música: Desligada</span>
+      </button>
+      <button id="btn-more-confetti" class="control-btn accent" title="Lançar mais confetes">
+        🎊 <span class="btn-text">Confetes!</span>
+      </button>
+      <button id="btn-more-fireworks" class="control-btn accent" title="Lançar fogos de artifício">
+        🎆 <span class="btn-text">Fogos!</span>
+      </button>
+      <button id="btn-more-balloons" class="control-btn accent" title="Soltar mais balões">
+        🎈 <span class="btn-text">Balões!</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- TELA INICIAL: O Convite / Botão da Grande Surpresa -->
+  <section id="hero-welcome" class="hero-screen">
+    <div class="welcome-card glass-panel">
+      <div class="sparkle-icon">✨ 🎂 ✨</div>
+      <p class="greeting-pre">Atenção! Mensagem urgente para...</p>
+      <h1 class="target-name" id="display-name-hero">Uma Pessoa Incrível</h1>
+      <p class="greeting-desc">
+        Hoje é o seu dia especial! Preparei um pequeno presente (pq eu to muito sem criatividade).
+      </p>
+      
+      <div class="cta-wrapper">
+        <button id="btn-trigger-surprise" class="magic-button">
+          <span class="button-glow"></span>
+          <span class="button-content">
+            <span class="btn-icon">🎁</span>
+            <span class="btn-title">CLIQUE AQUI PARA ABRIR SUA SURPRESA!</span>
+            <span class="btn-sub">Prepare o coração ❤️</span>
+          </span>
+        </button>
+      </div>
+
+      <div class="hint-text">
+        <small> ps: Espero que goste</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTEÚDO PRINCIPAL (Aparece após o clique com efeitos) -->
+  <main id="main-celebration" class="main-content hidden">
+
+    <!-- Banner de Felicitações -->
+    <section class="celebration-hero">
+      <div class="badge-ribbon">Parabéns pelo seu dia!</div>
+      <h1 class="headline-title">
+        Feliz Aniversário, <span class="gradient-text" id="display-name-main">Duda</span>!
+      </h1>
+      <p class="headline-subtitle">
+        Que seu novo ciclo venha carregado de sorrisos, saúde radiante, sonhos realizados e muitas vitórias! 🌟
+      </p>
+
+      <div class="quick-stats">
+        <div class="stat-card glass-panel">
+          <span class="stat-emoji">⏳</span>
+          <span class="stat-number">+1</span>
+          <span class="stat-label">Ano de pura luz e história</span>
+        </div>
+        <div class="stat-card glass-panel">
+          <span class="stat-emoji">💖</span>
+          <span class="stat-number">365</span>
+          <span class="stat-label">Novas chances de ser feliz</span>
+        </div>
+        <div class="stat-card glass-panel">
+          <span class="stat-emoji">🚀</span>
+          <span class="stat-number">100%</span>
+          <span class="stat-label">Motivos para comemorar</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO: O Bolo de Aniversário Interativo -->
+    <section class="section-card glass-panel cake-section">
+      <div class="section-header">
+        <span class="tag">Interativo</span>
+        <h2>Hora do Pedido: Sopre as Velas! 🎂</h2>
+        <p>Pense com muito carinho no seu maior desejo para este ano e clique nas chamas para soprar as velas!</p>
+      </div>
+
+      <div class="cake-container" id="cake-container">
+        <div class="bc-cake" id="birthday-cake">
+          <div class="bc-glow"></div>
+
+          <!-- Velas (clique na chama para apagar) -->
+          <div class="bc-candles">
+            <div class="candle" data-lit="true" role="button" tabindex="0" aria-label="Apagar vela">
+              <div class="flame"></div><div class="wick"></div><i class="smoke"></i>
+            </div>
+            <div class="candle" data-lit="true" role="button" tabindex="0" aria-label="Apagar vela">
+              <div class="flame"></div><div class="wick"></div><i class="smoke"></i>
+            </div>
+            <div class="candle center-candle" data-lit="true" role="button" tabindex="0" aria-label="Apagar vela">
+              <div class="flame"></div><div class="wick"></div><i class="smoke"></i>
+            </div>
+            <div class="candle" data-lit="true" role="button" tabindex="0" aria-label="Apagar vela">
+              <div class="flame"></div><div class="wick"></div><i class="smoke"></i>
+            </div>
+            <div class="candle" data-lit="true" role="button" tabindex="0" aria-label="Apagar vela">
+              <div class="flame"></div><div class="wick"></div><i class="smoke"></i>
+            </div>
+          </div>
+
+          <!-- Camadas do bolo -->
+          <div class="bc-tier bc-top">
+            <div class="bc-icing"></div>
+          </div>
+          <div class="bc-tier bc-mid">
+            <div class="bc-icing"></div>
+            <span class="bc-fruit bc-fl">🍓</span>
+            <span class="bc-fruit bc-fr">🍓</span>
+          </div>
+          <div class="bc-tier bc-bottom">
+            <div class="bc-icing"></div>
+            <span class="bc-fruit bc-fl">🍒</span>
+            <span class="bc-fruit bc-fr">🍒</span>
+            <span class="bc-script">Parabéns!</span>
+          </div>
+
+          <!-- Prato com pedestal -->
+          <div class="bc-plate"></div>
+          <div class="bc-stem"></div>
+          <div class="bc-base"></div>
+        </div>
+
+
+        <div class="cake-actions">
+          <button id="btn-blow-candles" class="sub-btn">
+            💨 Soprar Todas as Velas!
+          </button>
+          <button id="btn-relight-candles" class="sub-btn secondary hidden">
+            🔥 Acender Velas Novamente
+          </button>
+        </div>
+        
+        <div id="wish-status" class="wish-message hidden">
+          ✨ <strong>Desejo enviado com sucesso para o Universo!</strong> Ele vai se realizar! 🎉
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO: A Carta (envelope que abre) -->
+    <section class="section-card glass-panel gift-section">
+      <div class="section-header">
+        <span class="tag">Surpresa</span>
+        <h2>Uma Carta Para Você 💌</h2>
+        <p>Tem uma mensagem guardada aqui dentro especialmente para você. Toque no envelope para abrir!</p>
+      </div>
+
+      <div class="envelope-scene" id="envelope-scene">
+        <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Abrir a carta">
+          <div class="env-back"></div>
+          <div class="env-paper"><span></span><span></span><span></span><span></span></div>
+          <div class="env-front"></div>
+          <div class="env-flap"></div>
+          <div class="env-seal">♥</div>
+        </div>
+        <p class="envelope-hint">Toque para abrir 💌</p>
+
+        <!--
+          ✏️ PERSONALIZE A CARTA:
+          - Troque os textos abaixo (título, mensagem, assinatura, selo).
+          - Troque o fundo mudando o tema na class: tema-papel | tema-rosa | tema-noite | tema-imagem
+            (tema-imagem usa a foto fotos/carta-fundo.jpg; as cores ficam no fim do style.css)
+        -->
+        <article class="carta tema-papel" id="carta">
+          <h3 class="carta-titulo">Uma Carta do Fundo do Coração ❤️</h3>
+          <p class="carta-texto">
+            Eu j fiz uma carta pra você, então se eu fizesse outra ia ficar chato,
+            mesmo que eu goste bastante de fazer cartas (para algumas pessoas) então fiz essa:
+            Parabéns meu amor, que a sua vida seja sempre doce, como você mesma já é, que não lhe falte motivos para rir,
+            e que cada novo dia te aproxime dos seus maiores sonhos. Ter você por perto é
+            bem melhor.
+          </p>
+          <p class="carta-assinatura">
+            Com todo carinho, admiração e amor,<br>
+            <strong>Do seu amigo Enzo! ✨</strong>
+          </p>
+          <div class="carta-selo">🎂 NOTA 10/10</div>
+          <button id="btn-close-carta" class="sub-btn secondary">✉️ Guardar a carta</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- SEÇÃO: Gerador de Elogios e Motivos para Celebrar -->
+    <section class="section-card glass-panel compliments-section">
+      <div class="section-header">
+        <span class="tag">Motivos para Celebrar</span>
+        <h2>Por que você é tão Incrível? 🌟</h2>
+        <p>Clique no botão para sortear uma verdade sobre você hoje:</p>
+      </div>
+
+      <div class="compliment-box">
+        <div class="quote-mark">“</div>
+        <p id="compliment-text" class="compliment-text">
+          Você tem uma energia contagiante que alegra qualquer ambiente em que entra!
+        </p>
+        <button id="btn-next-compliment" class="sub-btn">
+          Quero outro motivo!
+        </button>
+      </div>
+    </section>
+
+    <!-- SEÇÃO: Mural de Recordações / Fotos -->
+    <section class="section-card glass-panel memories-section">
+      <div class="section-header">
+        <span class="tag">Mural de Afeto</span>
+        <h2>Momentos que Vale a Pena Lembrar 📸</h2>
+        <p>Eu infelizmente não tenho fotos contigo, então separei alguns momentos que devem ser importantes para você</p>
+      </div>
+
+      <!-- As fotos são montadas pelo script.js (lista FOTOS, no topo do arquivo) -->
+      <div class="polaroid-grid" id="polaroid-grid"></div>
+    </section>
+
+    <!-- SEÇÃO: Lançador de Desejos -->
+    <section class="section-card glass-panel wish-launcher-section">
+      <div class="section-header">
+        <span class="tag">Para o Universo</span>
+        <h2>Escreva um Desejo para essa nova etapa 🌠</h2>
+        <p>Digite uma meta, sonho ou sentimento e lance para o espaço estrelado!</p>
+      </div>
+
+      <div class="wish-form">
+        <input type="text" id="user-wish-input" placeholder="" maxlength="120" />
+        <button id="btn-send-wish" class="sub-btn accent-gradient">
+          Lançar Estrela Cadente
+        </button>
+      </div>
+      <div id="wish-feedback" class="wish-feedback"></div>
+      <p id="wish-aviso" class="wish-aviso hidden">💌 O desejo também é enviado para o Enzo.</p>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="page-footer">
+      <p>Feito especialmente com muito amor e carinho 💖</p>
+      <p><small>Aperte em qualquer balão que passar na tela para estourá-lo!</small></p>
+      <button id="btn-replay-all" class="sub-btn replay-btn">
+       Se quiser ir ver de novo
+      </button>
+    </footer>
+
+  </main>
+<!-- Pop-up que aparece quando estouram 10 balões (o número fica no topo do script.js) -->
+  <div id="popup-baloes" class="modal-overlay">
+    <div class="modal-box glass-panel popup-baloes-box">
+      <!--
+        ✏️ PERSONALIZE AQUI: troque o emoji, o título e o texto.
+        Para colocar uma foto, salve em fotos/popup.jpg e tire as setas de comentário da linha da imagem.
+      -->
+      <div class="popup-emoji">🎈</div>
+      <h3>10 balões estourados! 🎉</h3>
+      <p>Você ganhou um presente!<br>Diz pra quem te mandou isso (Claro que foi Enzo) que voce estourou os 10 balões e ele vai te dar um presente
+      mas você vai ter que dizer o que voce quer de presente porque ele queria muito te dar algo que voce gostasse mas ele infelizmente não
+       te conhece tão bem quanto queria, então fala com ele, porque ele é meio besta pra ficar perguntando as coisas que vc gosta sem revelar que vai fazer algo.</p>
+      <img src="fotos/popup.jpg" alt=""> 
+      <div class="modal-buttons">
+        <button id="btn-close-popup" class="sub-btn">Fechar</button>        <!-- namora comigo duda -->
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

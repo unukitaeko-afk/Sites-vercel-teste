@@ -1,0 +1,9 @@
+Coloque suas fotos aqui (foto1.jpg, foto2.jpg, foto3.jpg, foto4.jpg).
+
+- Use nomes em minusculo, sem espaco e sem acento.
+- Para mais fotos, adicione uma linha na lista FOTOS no topo do script.js.
+- Dica: reduza fotos de celular (ideal: ate ~1600 px e menos de 500 KB cada) para o site abrir rapido.
+
+Opcionais:
+- carta-fundo.jpg : fundo da carta (use a class tema-imagem na carta, no index.html)
+- popup.jpg       : foto do pop-up dos baloes (descomente a linha da imagem no index.html)
