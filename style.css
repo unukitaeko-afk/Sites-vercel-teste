@@ -1678,26 +1678,3 @@ canvas {
 .popup-baloes-box img { display:block; max-width:100%; margin:0 auto 1rem; border-radius:12px; }
 .popup-baloes-box .modal-buttons { justify-content:center; }
 .wish-aviso { margin-top:.8rem; text-align:center; font-size:.8rem; color:var(--text-secondary); }
-
-/* ===========================================================
-   BARRA DO TOPO NO CELULAR (uma linha só; desliza se faltar espaço)
-=========================================================== */
-@media (max-width: 600px) {
-  .top-controls { padding: 0.6rem 0.75rem; flex-wrap: nowrap; gap: 0; }
-  .top-controls .brand { display: none; }
-  .top-controls .actions {
-    width: 100%;
-    order: 0;
-    flex-wrap: nowrap;
-    justify-content: center;
-    gap: 0.4rem;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-  .top-controls .actions::-webkit-scrollbar { display: none; }
-  .top-controls .control-btn { flex: 0 0 auto; padding: 0.45rem 0.7rem; font-size: 0.75rem; white-space: nowrap; }
-  /* Confetes / Fogos / Balões: só o ícone */
-  .top-controls .control-btn.accent .btn-text { display: none; }
-  .top-controls .control-btn.accent { padding: 0.45rem 0.8rem; font-size: 1rem; }
-}
